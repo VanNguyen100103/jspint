@@ -40,6 +40,14 @@ public class JwtUtils {
         return generateToken(username);
     }
 
+    public String generateAccessToken(User user) {
+        return generateToken(user.getEmail(), ACCESS_EXPIRATION);
+    }
+
+    public String generateRefreshToken(User user) {
+        return generateToken(user.getEmail(), REFRESH_EXPIRATION);
+    }
+
     public String generateToken(String username){
         return Jwts.builder()
                 .subject(username)
