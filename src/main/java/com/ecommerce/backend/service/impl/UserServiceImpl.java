@@ -103,6 +103,13 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("Password does not match");
         }
         String token = jwtUtils.generateToken(user);
+        String refreshToken = jwtUtils.generateRefreshToken(user);
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+    refreshTokenCookie.setHttpOnly(true);
+    refreshTokenCookie.setSecure(true); // Chỉ dùng trên HTTPS
+    refreshTokenCookie.setPath("/auth/refresh"); // Chỉ gửi cookie đến endpoint refresh
+    refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
+    response.addCookie(refreshTokenCookie);
 
         return Response.builder()
                 .status(200)
